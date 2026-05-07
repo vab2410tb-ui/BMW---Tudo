@@ -1,24 +1,25 @@
-# 1. Sử dụng hình ảnh PHP 8.1 kết hợp Apache
+# 1. Sử dụng PHP 8.1 Apache
 FROM php:8.1-apache
 
-# 2. Cài đặt các thư viện hệ thống cần thiết cho PostgreSQL
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
+# 2. Cài đặt PostgreSQL driver
+RUN apt-get update && apt-get install -y libpq-dev \
     && docker-php-ext-install pgsql pdo_pgsql
 
-# 3. Copy toàn bộ code từ thư mục app vào thư mục chạy web của Apache
+# 3. FIX LỖI MPM: Tắt mpm_event và bật mpm_prefork (chuẩn cho PHP)
+RUN a2dismod mpm_event || true && a2enmod mpm_prefork
+
+# 4. Copy code vào thư mục web
 COPY app/ /var/www/html/
 
-# 4. Tạo thư mục images và cấp quyền (Sửa lỗi Build Failed ở bước trước)
+# 5. Tạo thư mục images và cấp quyền
 RUN mkdir -p /var/www/html/images \
     && chown -R www-data:www-data /var/www/html/images \
     && chmod -R 777 /var/www/html/images
 
-# 5. Kích hoạt module rewrite của Apache để hỗ trợ file .htaccess (Kịch bản 6)
+# 6. Bật module rewrite cho .htaccess
 RUN a2enmod rewrite
 
-# 6. Mở cổng 80 để truy cập từ Internet
 EXPOSE 80
 
-# 7. Khởi động Apache ở chế độ foreground
+# Chạy Apache ở chế độ foreground
 CMD ["apache2-foreground"]
