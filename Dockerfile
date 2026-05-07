@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y libpq-dev \
     && docker-php-ext-install pgsql pdo_pgsql
 
 # Copy toàn bộ nội dung thư mục app vào thư mục web của Apache
-
+# Lưu ý: Nếu code của bạn nằm trong thư mục app/, hãy dùng lệnh dưới
+COPY app/ /var/www/html/
 
 # Bật module rewrite để file .htaccess hoạt động
 RUN a2enmod rewrite
