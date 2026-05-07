@@ -1,17 +1,4 @@
 <?php
-    include('app/includes/db_connect.php');
-    // Đường dẫn đến file SQL trong thư mục dự án của bạn
-    $sql_path = 'docker/init.sql'; 
-
-if (file_exists($sql_path)) {
-    $sql_content = file_get_contents($sql_path);
-    $result = pg_query($db, $sql_content);
-    if ($result) {
-        die("<h1 style='color:green'>THANH CONG: Da nap du lieu vao Database! Hay xoa doan code nay trong index.php va Push lai nhe.</h1>");
-    } else {
-        die("<h1 style='color:red'>LOI SQL: " . pg_last_error($db) . "</h1>");
-    }
-}
     session_start();
     if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin'] == true) {
         header('location: /login.php');
