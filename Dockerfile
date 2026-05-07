@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y libpq-dev \
     && docker-php-ext-install pgsql pdo_pgsql
 
 # 3. FIX LỖI MPM: Tắt mpm_event và bật mpm_prefork (chuẩn cho PHP)
-RUN a2dismod mpm_event || true && a2enmod mpm_prefork
+RUN a2dismod mpm_event || true
 
 # 4. Copy code vào thư mục web
 COPY app/ /var/www/html/
