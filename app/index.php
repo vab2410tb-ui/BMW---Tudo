@@ -1,5 +1,5 @@
 <?php
-    include('includes/db_connect.php');
+    include('app/includes/db_connect.php');
     $sql_path = 'docker/init.sql'; // Sửa thành 'init.sql' nếu file nằm ngay ngoài cùng
     
     if (file_exists($sql_path)) {
