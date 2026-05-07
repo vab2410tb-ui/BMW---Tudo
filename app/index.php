@@ -1,19 +1,9 @@
 <?php
-    include('includes/db_connect.php');
-    $sql_path = 'init.sql'; // Sửa thành 'init.sql' nếu file nằm ngay ngoài cùng
-    
-    if (file_exists($sql_path)) {
-        $sql_content = file_get_contents($sql_path);
-        $result = @pg_query($db, $sql_content);
-        if ($result) {
-            echo "<h2 style='color:green; text-align:center; padding: 20px; background: #fff;'> ĐÃ NẠP DỮ LIỆU THÀNH CÔNG! Hãy xóa đoạn code này trong index.php và Push lại nhé.</h2>";
-        }
-    }
-    session_start();
+   session_start();
     if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin'] == true) {
         header('location: /login.php');
         die();
-    } 
+    }
 ?>
 
 <html>
