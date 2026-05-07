@@ -1,22 +1,18 @@
 FROM php:8.1-apache
 
-# Cài đặt PostgreSQL driver
+# 1. Cài đặt PostgreSQL driver
 RUN apt-get update && apt-get install -y libpq-dev \
     && docker-php-ext-install pgsql pdo_pgsql
 
-# Sửa lỗi AH00534: Xóa file load module xung đột trực tiếp
-RUN rm -f /etc/apache2/mods-enabled/mpm_event.load \
-    && rm -f /etc/apache2/mods-enabled/mpm_event.conf \
-    && a2enmod mpm_prefork
+# 2. ÉP TẮT module xung đột bằng lệnh chuẩn
+RUN a2dismod -f mpm_event || true
+RUN a2enmod mpm_prefork
 
-# Copy mã nguồn vào thư mục web
+# 3. Copy mã nguồn
 COPY app/ /var/www/html/
 
-# Cấp quyền và bật module rewrite
-RUN chown -R www-data:www-data /var/www/html \
-    && a2enmod rewrite
+# 4. Quyền hạn và rewrite
+RUN chown -R www-data:www-data /var/www/html && a2enmod rewrite
 
 EXPOSE 80
-
-# Chạy Apache ở chế độ foreground
 CMD ["apache2-foreground"]
